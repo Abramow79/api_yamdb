@@ -30,7 +30,18 @@ def categorie_delete(request, slug):
 class GenreViwSet(viewsets.ModelViewSet):
     queryset = Genres.objects.all()
     serializer_class = GenresSerializer
-    permission_classes = (IsAuthorOrReadOnly, IsAdminmMderator,)
+    permission_classes = (IsAdminmOrReadOnly,)
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name',)
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAdminmOrReadOnly])
+def genres_delete(request, slug):
+    genres = Genres.objects.get(slug=slug)
+    if request.method == 'DELETE':
+        genres.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class TitlesViewSet(viewsets.ModelViewSet):

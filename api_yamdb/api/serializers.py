@@ -16,5 +16,5 @@ class TitleSerializer(serializers.ModelSerializer):
 
 class GenresSerializer(serializers.ModelSerializer):
     class Meta:
-        fields = '__all__'
+        fields = ('name', 'slug')
         model = Genres
