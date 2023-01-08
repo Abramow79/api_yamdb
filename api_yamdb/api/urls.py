@@ -4,10 +4,12 @@ from rest_framework.authtoken import views
 from .views import CategorieViewSet, GenreViwSet, TitlesViewSet
 from .views import categorie_delete, genres_delete
 
+app_name = 'api'
+
 v1_router = routers.DefaultRouter()
-v1_router.register('categories', CategorieViewSet, basename='categorie')
-v1_router.register('genres', GenreViwSet, basename='genre')
-v1_router.register('titles', TitlesViewSet, basename='title')
+v1_router.register('categories', CategorieViewSet, basename='categories')
+v1_router.register('genres', GenreViwSet, basename='genres')
+v1_router.register('titles', TitlesViewSet, basename='titles')
 
 urlpatterns = [
     path('v1/categories/<slug:slug>/', categorie_delete),

@@ -1,5 +1,3 @@
-from rest_framework.response import Response
-from rest_framework import status
 from django.shortcuts import get_object_or_404
 from rest_framework import permissions
 from users.models import User
@@ -10,13 +8,6 @@ class IsAdminmOrReadOnly(permissions.BasePermission):
         return (request.method in permissions.SAFE_METHODS
                 or request.user.is_authenticated
                 and (request.user.is_staff or request.user.role == "admin"))
-
-    def has_object_permission(self, request, view, obj):
-        if request.method in permissions.SAFE_METHODS:
-            return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
-        return request.user.is_authenticated and (
-            request.user.role == "admin" or request.user.is_superuser
-        )
 
 
 class IsAdminmMderator(permissions.BasePermission):
@@ -31,6 +22,3 @@ class IsAuthorOrReadOnly(permissions.BasePermission):
         return (request.method in permissions.SAFE_METHODS
                 or request.user.is_authenticated
                 )
-
-    def has_object_permission(self, request, view, obj):
-        return obj.author == request.user
