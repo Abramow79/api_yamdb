@@ -7,23 +7,23 @@ from users.validators import UsernameRegexValidator, username_me
 
 
 class User(AbstractUser):
-    USER = 'user'
-    MODERATOR = 'moderator'
-    ADMIN = 'admin'
+    USER = "user"
+    MODERATOR = "moderator"
+    ADMIN = "admin"
 
     CHOICES_ROLE = (
-        (USER, 'Пользователь'),
-        (MODERATOR, 'Модератор'),
-        (ADMIN, 'Администратор'),
+        (USER, "Пользователь"),
+        (MODERATOR, "Модератор"),
+        (ADMIN, "Администратор"),
     )
     username_validator = UsernameRegexValidator()
     username = models.CharField(
-        'Логин',
+        "Логин",
         max_length=settings.LIMIT_USERNAME,
         unique=True,
         help_text=_(
-            'Required. 150 characters or fewer. '
-            'Letters, digits and @/./+/-/_ only.'
+            "Required. 150 characters or fewer. "
+            "Letters, digits and @/./+/-/_ only."
         ),
         validators=[username_validator, username_me],
         error_messages={
@@ -31,14 +31,14 @@ class User(AbstractUser):
         },
     )
     first_name = models.CharField(
-        'Имя', max_length=settings.LIMIT_USERNAME, blank=True)
-    bio = models.TextField('Биография', blank=True)
+        "Имя", max_length=settings.LIMIT_USERNAME, blank=True)
+    bio = models.TextField("Биография", blank=True)
     role = models.CharField(
-        'Роль пользователя',
+        "Роль пользователя",
         default=USER,
         max_length=max(len(role) for role, _ in CHOICES_ROLE),
         choices=CHOICES_ROLE)
-    email = models.EmailField('E-mail пользователя',
+    email = models.EmailField("E-mail пользователя",
                               unique=True, max_length=settings.LIMIT_EMAIL)
 
     @property
@@ -54,12 +54,12 @@ class User(AbstractUser):
         return self.role == self.ADMIN or self.is_superuser or self.is_staff
 
     class Meta:
-        verbose_name = 'Пользователь'
-        verbose_name_plural = 'Пользователи'
-        ordering = ('id',)
+        verbose_name = "Пользователь"
+        verbose_name_plural = "Пользователи"
+        ordering = ("id",)
         constraints = [
             models.CheckConstraint(
-                check=~models.Q(username='me'), name='name_not_me')
+                check=~models.Q(username="me"), name="name_not_me")
         ]
 
     def __str__(self):

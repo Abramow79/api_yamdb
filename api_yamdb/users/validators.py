@@ -3,13 +3,13 @@ from django.core import exceptions
 
 
 class UsernameRegexValidator(UnicodeUsernameValidator):
-    regex = r'^[\w.@+-]+\Z'
+    regex = r"^[\w.@+-]+\Z"
     flags = 0
 
 
 def username_me(value):
-    if value == 'me':
+    if value == "me":
         raise exceptions.ValidationError(
-            'Имя пользователя "me" не разрешено.'
+            "Имя пользователя 'me' не разрешено."
         )
     return value

@@ -13,7 +13,7 @@ from users.validators import username_me
 
 class SignUpSerializer(serializers.Serializer):
     username = serializers.RegexField(max_length=settings.LIMIT_USERNAME,
-                                      regex=r'^[\w.@+-]+\Z', required=True)
+                                      regex=r"^[\w.@+-]+\Z", required=True)
     email = serializers.EmailField(
         max_length=settings.LIMIT_EMAIL,
         required=True)
@@ -24,7 +24,7 @@ class SignUpSerializer(serializers.Serializer):
 
 class TokenRegSerializer(serializers.Serializer):
     username = serializers.RegexField(max_length=settings.LIMIT_USERNAME,
-                                      regex=r'^[\w.@+-]+\Z', required=True)
+                                      regex=r"^[\w.@+-]+\Z", required=True)
     confirmation_code = serializers.CharField(max_length=settings.LIMIT_CHAT,
                                               required=True)
 
@@ -38,14 +38,12 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
-            'username', 'email', 'first_name', 'last_name', 'bio', 'role'
-        )
+            "username", "email", "first_name", "last_name", "bio", "role")
 
     def validate_username(self, username):
-        if username in 'me':
+        if username in "me":
             raise serializers.ValidationError(
-                'Использовать имя me запрещено'
-            )
+                "Использовать имя me запрещено")
         return username
 
 
@@ -54,54 +52,57 @@ class UserEditSerializer(UserSerializer):
 
 
 class CategorySerializer(serializers.ModelSerializer):
+    """Сериализатор модели Category."""
 
     class Meta:
         model = Category
-        fields = ('name', 'slug')
+        fields = ("name", "slug")
 
 
 class GenreSerializer(serializers.ModelSerializer):
+    """Сериализатор модели Genre."""
 
     class Meta:
         model = Genre
-        fields = ('name', 'slug')
+        fields = ("name", "slug")
 
 
 class TitleSerializer(serializers.ModelSerializer):
+    """Сериализатор модели Title."""
     genre = GenreSerializer(many=True)
     category = CategorySerializer()
     rating = serializers.IntegerField(default=1)
 
     class Meta:
         model = Title
-        fields = ('id', 'name', 'year', 'rating',
-                  'description', 'genre', 'category',)
-        read_only_fields = ('id', 'name', 'year', 'rating',
-                            'description', 'genre', 'category',)
+        fields = ("id", "name", "year", "rating",
+                  "description", "genre", "category",)
+        read_only_fields = ("id", "name", "year", 'rating',
+                            "description", "genre", "category",)
 
 
 class TitlePostSerialzier(serializers.ModelSerializer):
     genre = serializers.SlugRelatedField(
-        slug_field='slug',
+        slug_field="slug",
         queryset=Genre.objects.all(),
         many=True
     )
     category = serializers.SlugRelatedField(
-        slug_field='slug',
+        slug_field="slug",
         queryset=Category.objects.all()
     )
     rating = serializers.IntegerField(required=False)
 
     class Meta:
         model = Title
-        fields = ('id', 'name', 'year', 'rating',
-                  'description', 'genre', 'category')
+        fields = ("id", "name", "year", 'rating',
+                  "description", "genre", "category",)
 
     def validate_year(self, value):
         current_year = dt.date.today().year
         if (value > current_year):
             raise serializers.ValidationError(
-                'Год произведения не может быть больше текущего.'
+                "Год произведения не может быть больше текущего."
             )
         return value
 
@@ -112,33 +113,35 @@ class TitlePostSerialzier(serializers.ModelSerializer):
 
 
 class ReviewSerializer(serializers.ModelSerializer):
+    """Сериализатор модели Review."""
     author = serializers.SlugRelatedField(
         read_only=True,
-        slug_field='username'
+        slug_field="username"
     )
     score = serializers.IntegerField(validators=[
         MinValueValidator(limit_value=settings.MIN_LIMIT_VALUE,
-                          message='Минимальное значение рейтинга - 1'),
+                          message="Минимальное значение рейтинга - 1"),
         MaxValueValidator(limit_value=settings.MAX_LIMIT_VALUE,
-                          message='Максимальное значение рейтинга - 10')
+                          message="Максимальное значение рейтинга - 10")
     ])
 
     def validate(self, data):
-        if self.context.get('request').method == 'POST':
-            author = self.context.get('request').user
-            title_id = self.context.get('view').kwargs.get('title_id')
+        if self.context.get("request").method == "POST":
+            author = self.context.get("request").user
+            title_id = self.context.get("view").kwargs.get("title_id")
             title = get_object_or_404(Title, id=title_id)
             if Review.objects.filter(title_id=title.id,
                                      author=author).exists():
-                raise ValidationError('Может существовать только один отзыв!')
+                raise ValidationError("Вы можете оставлять только один отзыв!")
         return data
 
     class Meta:
         model = Review
-        fields = ('id', 'text', 'author', 'score', 'pub_date')
+        fields = ("id", "text", "author", "score", "pub_date")
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    """Сериализатор модели Comments."""
     author = serializers.SlugRelatedField(
         read_only=True,
         slug_field='username'
@@ -146,5 +149,5 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comments
-        fields = ('id', 'text', 'pub_date', 'author', 'review')
-        read_only_fields = ('review',)
+        fields = ("id", "text", "pub_date", "author", "review")
+        read_only_fields = ("review",)

@@ -2,6 +2,8 @@ from rest_framework import permissions
 
 
 class IsAdminOrReadOnly(permissions.BasePermission):
+    """Разрешает анонимному пользователю только безопасные запросы.
+    Права на запросы для админа, аутентифицированного пользователя"""
 
     def has_permission(self, request, view):
         return (
@@ -14,6 +16,11 @@ class IsAdminOrReadOnly(permissions.BasePermission):
 class IsAuthorOrModeRatOrOrAdminOrReadOnly(
     permissions.IsAuthenticatedOrReadOnly
 ):
+    """
+    Предоставляет права на осуществление запросов админу Джанго,
+    модератору или аутентифицированному пользователю c ролью admin.
+    Для неаутентифицированных пользователей доступны безопасные методы.
+    """
 
     def has_object_permission(self, request, view, obj):
         return (
@@ -25,6 +32,10 @@ class IsAuthorOrModeRatOrOrAdminOrReadOnly(
 
 
 class IsAdmin(permissions.BasePermission):
+    """
+    Предоставляет права на осуществление запросов
+    только админу Джанго или аутентифицированному пользователю c ролью admin.
+    """
 
     def has_permission(self, request, view):
         return (
