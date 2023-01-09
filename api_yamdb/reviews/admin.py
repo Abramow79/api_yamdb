@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+<<<<<<< HEAD
 from .models import Category, Comments, Genre, Review, Title
 from users.models import User
 
@@ -35,3 +36,6 @@ admin.site.register(Genre, GenreAdmin)
 admin.site.register(Title, TitleAdmin)
 admin.site.register(Review, ReviewAdmin)
 admin.site.register(Comments, CommentsAdmin)
+=======
+# Register your models here.
+>>>>>>> dev2_Models_Views_URLs

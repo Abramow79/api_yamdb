@@ -1,4 +1,5 @@
 import os
+# from pathlib import Path
 from datetime import timedelta
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -11,6 +12,8 @@ ALLOWED_HOSTS = ['*']
 
 
 INSTALLED_APPS = [
+    'api',
+    'reviews',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -23,6 +26,9 @@ INSTALLED_APPS = [
     'reviews.apps.ReviewsConfig',
     'api.apps.ApiConfig',
     'django_filters',
+    'rest_framework.authtoken',
+    'djoser',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -131,3 +137,30 @@ LIMIT_USERNAME = 150
 LIMIT_EMAIL = 254
 MIN_LIMIT_VALUE = 1
 MAX_LIMIT_VALUE = 10
+
+
+# STATICFILES_DIRS = ((BASE_DIR / 'static/'),)
+
+# REST_FRAMEWORK = {
+#     'DEFAULT_PERMISSION_CLASSES': [
+#         'rest_framework.permissions.IsAuthenticated',
+#     ],
+
+#     'DEFAULT_AUTHENTICATION_CLASSES': [
+#         'rest_framework_simplejwt.authentication.JWTAuthentication',
+#     ],
+#     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+#     'PAGE_SIZE': 5,
+# }
+
+
+# SIMPLE_JWT = {
+#     # Устанавливаем срок жизни токена
+#     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+#     'AUTH_HEADER_TYPES': ('Bearer',),
+# }
+
+# AUTH_USER_MODEL = 'users.User'
+
+# DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+# >>>>>>> dev2_Models_Views_URLs
