@@ -1,10 +1,48 @@
-from django.core.validators import MaxValueValidator, MinValueValidator
 from django.conf import settings
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-
 from reviews.utilites import current_year
 from users.models import User
 
+
+class Genre(models.Model):
+    name = models.CharField(max_length=256,
+                            verbose_name='Название')
+    slug = models.SlugField(unique=True)
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=256,
+                            verbose_name='Название')
+    slug = models.SlugField(unique=True)
+
+
+class Title(models.Model):
+    name = models.CharField(max_length=256,
+                            verbose_name='Название')
+    year = models.PositiveSmallIntegerField(
+        'Год выпуска',
+        db_index=True,
+        validators=[MinValueValidator(
+                    limit_value=settings.MIN_LIMIT_VALUE,
+                    message="Год не может быть меньше или равен нулю"),
+                    MaxValueValidator(
+                    limit_value=current_year,
+                    message="Год не может быть больше текущего")])
+    description = models.TextField(verbose_name='Описание', blank=True)
+    genre = models.ManyToManyField(Genre,
+                                   null=True,
+                                   verbose_name='Жанры', related_name='genres')
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL,
+                                 null=True,
+                                 related_name='categories', blank=True,
+                                 verbose_name='Категория',)
+
+    class Meta:
+        default_related_name = "titles"
+
+
+# мои модели
 
 class AbstractModelGenreCategory(models.Model):
     name = models.CharField("Имя", max_length=settings.LIMIT_CHAT)
@@ -33,51 +71,6 @@ class AbstractModelReviewComment(models.Model):
 
     def __str__(self):
         return self.text[settings.LIMIT_TEXT]
-
-
-class Category(AbstractModelGenreCategory):
-    class Meta(AbstractModelGenreCategory.Meta):
-        verbose_name = "Категория"
-        verbose_name_plural = "Категории"
-        default_related_name = "categories"
-
-
-class Genre(AbstractModelGenreCategory):
-    class Meta(AbstractModelGenreCategory.Meta):
-        verbose_name = "Жанр"
-        verbose_name_plural = "Жанры"
-        default_related_name = "genres"
-
-
-class Title(models.Model):
-    name = models.CharField(
-        "Название произведения", max_length=settings.LIMIT_CHAT)
-    year = models.PositiveSmallIntegerField(
-        "Год выпуска",
-        db_index=True,
-        validators=[MinValueValidator(
-                    limit_value=settings.MIN_LIMIT_VALUE,
-                    message="Год не может быть меньше или равен нулю"),
-                    MaxValueValidator(
-                    limit_value=current_year,
-                    message="Год не может быть больше текущего")])
-    description = models.TextField("Описание", blank=True)
-    genre = models.ManyToManyField(
-        Genre)
-    category = models.ForeignKey(
-        Category,
-        on_delete=models.SET_NULL,
-        null=True,
-    )
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = "Произведение"
-        verbose_name_plural = "Произведения"
-        ordering = ("name",)
-        default_related_name = "titles"
 
 
 class AbstractModelReviewComments(models.Model):
