@@ -1,13 +1,6 @@
-from django.db import models
-from django.core.validators import MaxValueValidator, MinValueValidator
 from django.conf import settings
-from reviews.utilites import current_year
-
-
 from django.core.validators import MaxValueValidator, MinValueValidator
-from django.conf import settings
 from django.db import models
-
 from reviews.utilites import current_year
 from users.models import User
 
@@ -78,51 +71,6 @@ class AbstractModelReviewComment(models.Model):
 
     def __str__(self):
         return self.text[settings.LIMIT_TEXT]
-
-
-# class Category(AbstractModelGenreCategory):
-#     class Meta(AbstractModelGenreCategory.Meta):
-#         verbose_name = "Категория"
-#         verbose_name_plural = "Категории"
-#         default_related_name = "categories"
-
-
-# class Genre(AbstractModelGenreCategory):
-#     class Meta(AbstractModelGenreCategory.Meta):
-#         verbose_name = "Жанр"
-#         verbose_name_plural = "Жанры"
-#         default_related_name = "genres"
-
-
-# class Title(models.Model):
-#     name = models.CharField(
-#         "Название произведения", max_length=settings.LIMIT_CHAT)
-#     year = models.PositiveSmallIntegerField(
-#         "Год выпуска",
-#         db_index=True,
-#         validators=[MinValueValidator(
-#                     limit_value=settings.MIN_LIMIT_VALUE,
-#                     message="Год не может быть меньше или равен нулю"),
-#                     MaxValueValidator(
-#                     limit_value=current_year,
-#                     message="Год не может быть больше текущего")])
-#     description = models.TextField("Описание", blank=True)
-#     genre = models.ManyToManyField(
-#         Genre)
-#     category = models.ForeignKey(
-#         Category,
-#         on_delete=models.SET_NULL,
-#         null=True,
-#     )
-
-#     def __str__(self):
-#         return self.name
-
-#     class Meta:
-#         verbose_name = "Произведение"
-#         verbose_name_plural = "Произведения"
-#         ordering = ("name",)
-#         default_related_name = "titles"
 
 
 class AbstractModelReviewComments(models.Model):

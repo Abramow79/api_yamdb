@@ -1,6 +1,3 @@
-from reviews.models import Category, Title, Genre
-from rest_framework import serializers
-
 import datetime as dt
 
 from django.conf import settings
@@ -8,7 +5,6 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
-
 from reviews.models import Category, Comments, Genre, Review, Title
 from users.models import User
 from users.validators import username_me
@@ -60,19 +56,6 @@ class GenresSerializer(serializers.ModelSerializer):
         model = Genre
 
 
-# import datetime as dt
-
-# from django.conf import settings
-# from django.core.exceptions import ValidationError
-# from django.core.validators import MaxValueValidator, MinValueValidator
-# from django.shortcuts import get_object_or_404
-# from rest_framework import serializers
-
-# from reviews.models import Category, Comments, Genre, Review, Title
-# from users.models import User
-# from users.validators import username_me
-
-
 class SignUpSerializer(serializers.Serializer):
     username = serializers.RegexField(max_length=settings.LIMIT_USERNAME,
                                       regex=r"^[\w.@+-]+\Z", required=True)
@@ -111,36 +94,6 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UserEditSerializer(UserSerializer):
     role = serializers.CharField(read_only=True)
-
-
-# class CategorySerializer(serializers.ModelSerializer):
-#     """Сериализатор модели Category."""
-
-#     class Meta:
-#         model = Category
-#         fields = ("name", "slug")
-
-
-# class GenreSerializer(serializers.ModelSerializer):
-#     """Сериализатор модели Genre."""
-
-#     class Meta:
-#         model = Genre
-#         fields = ("name", "slug")
-
-
-# class TitleSerializer(serializers.ModelSerializer):
-#     """Сериализатор модели Title."""
-#     genre = GenreSerializer(many=True)
-#     category = CategorySerializer()
-#     rating = serializers.IntegerField(default=1)
-
-#     class Meta:
-#         model = Title
-#         fields = ("id", "name", "year", "rating",
-#                   "description", "genre", "category",)
-#         read_only_fields = ("id", "name", "year", 'rating',
-#                             "description", "genre", "category",)
 
 
 class TitlePostSerialzier(serializers.ModelSerializer):

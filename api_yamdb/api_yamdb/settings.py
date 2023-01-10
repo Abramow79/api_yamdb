@@ -1,7 +1,6 @@
 import os
-from pathlib import Path
 from datetime import timedelta
-
+from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -17,8 +16,6 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    # 'api',
-    # 'reviews',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -28,11 +25,13 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'djoser',
-    # 'users',
+    'api',
+    'reviews',
+    'users',
     'rest_framework_simplejwt',
-    'users.apps.UsersConfig',
-    'reviews.apps.ReviewsConfig',
-    'api.apps.ApiConfig',
+    # 'users.apps.UsersConfig',
+    # 'reviews.apps.ReviewsConfig',
+    # 'api.apps.ApiConfig',
     'django_filters',
 ]
 

@@ -1,41 +1,24 @@
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.response import Response
-from rest_framework import status
-from reviews.models import Category, Title, Genre
-from rest_framework import filters, viewsets
-from .serializers import (CategoriesSerializer, TitleSerializer,
-                          GenresSerializer)
-from .serializers import (CommentSerializer, ReviewSerializer,
-                          SignUpSerializer, TitleSerializer,
-                          TokenRegSerializer, UserSerializer)
-from .permissions import (IsAdminmOrReadOnly)
-from .filters import TitleFilter
-
 from django.conf import settings
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
 from django.db import IntegrityError
 from django.db.models import Avg
 from django.shortcuts import get_object_or_404
-from rest_framework import filters, mixins, status, viewsets, permissions
-from rest_framework.decorators import action
+from rest_framework import filters, mixins, permissions, status, viewsets
+from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-
-from .filters import TitleFilter
-from .permissions import (IsAdminOrReadOnly,
-                          IsAuthorOrModeRatOrOrAdminOrReadOnly,
-                          IsSuperUserOrIsAdminOnly)
-# from .serializers import (CategorySerializer, CommentSerializer,
-#                           GenreSerializer, ReviewSerializer,
-#                           SignUpSerializer, TitlePostSerialzier,
-#                           TitleSerializer, TokenRegSerializer,
-#                           UserSerializer)
-
-
 from reviews.models import Category, Genre, Review, Title
 from users.models import User
+
+from .filters import TitleFilter
+from .permissions import (IsAdminmOrReadOnly, IsAdminOrReadOnly,
+                          IsAuthorOrModeRatOrOrAdminOrReadOnly,
+                          IsSuperUserOrIsAdminOnly)
+from .serializers import (CategoriesSerializer, CommentSerializer,
+                          GenresSerializer, ReviewSerializer, SignUpSerializer,
+                          TitleSerializer, TokenRegSerializer, UserSerializer)
 
 
 class CategorieViewSet(viewsets.ModelViewSet):
@@ -81,47 +64,6 @@ class TitlesViewSet(viewsets.ModelViewSet):
     filterset_class = TitleFilter
     filterset_fields = ('name',)
     ordering = ('name',)
-
-# class TitleViewSet(viewsets.ModelViewSet):
-#     queryset = Title.objects.annotate(
-#         rating=Avg("reviews__score"))
-#     serializer_class = TitleSerializer
-#     permission_classes = (IsAdminOrReadOnly,)
-#     filterset_class = TitleFilter
-#     filterset_fields = ("name",)
-#     ordering = ("name",)
-
-#     def get_serializer_class(self):
-#         if self.request.method in ["POST", "PUT", "PATCH"]:
-#             return TitlePostSerialzier
-#         return TitleSerializer
-
-# <<<<<<< HEAD
-# from django.conf import settings
-# from django.contrib.auth.tokens import default_token_generator
-# from django.core.mail import send_mail
-# from django.db import IntegrityError
-# from django.db.models import Avg
-# from django.shortcuts import get_object_or_404
-# from rest_framework import filters, mixins, status, viewsets, permissions
-# from rest_framework.decorators import action
-# from rest_framework.response import Response
-# from rest_framework.views import APIView
-# from rest_framework_simplejwt.tokens import RefreshToken
-
-# from .filters import TitleFilter
-# from .permissions import (IsAdminOrReadOnly,
-#                           IsAuthorOrModeRatOrOrAdminOrReadOnly,
-#                           IsSuperUserOrIsAdminOnly)
-# from .serializers import (CategorySerializer, CommentSerializer,
-#                           GenreSerializer, ReviewSerializer,
-#                           SignUpSerializer, TitlePostSerialzier,
-#                           TitleSerializer, TokenRegSerializer,
-#                           UserSerializer)
-
-
-# from reviews.models import Category, Genre, Review, Title
-# from users.models import User
 
 
 class AdminViewSet(mixins.CreateModelMixin, mixins.ListModelMixin,
@@ -227,31 +169,6 @@ class UserViewSet(mixins.ListModelMixin,
             return Response(serializer.data, status=status.HTTP_200_OK)
         serializer = UserSerializer(request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-# class CategoryViewSet(AdminViewSet):
-#     queryset = Category.objects.all()
-#     serializer_class = CategorySerializer
-
-
-# class GenreViewSet(AdminViewSet):
-#     queryset = Genre.objects.all()
-#     serializer_class = GenreSerializer
-
-
-# class TitleViewSet(viewsets.ModelViewSet):
-#     queryset = Title.objects.annotate(
-#         rating=Avg("reviews__score"))
-#     serializer_class = TitleSerializer
-#     permission_classes = (IsAdminOrReadOnly,)
-#     filterset_class = TitleFilter
-#     filterset_fields = ("name",)
-#     ordering = ("name",)
-
-#     def get_serializer_class(self):
-#         if self.request.method in ["POST", "PUT", "PATCH"]:
-#             return TitlePostSerialzier
-#         return TitleSerializer
 
 
 class ReviewViewSet(viewsets.ModelViewSet):
