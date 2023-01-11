@@ -1,8 +1,8 @@
 from django.urls import include, path
 from rest_framework import routers
 from rest_framework.authtoken import views
-from .views import CategorieViewSet, GenreViwSet, TitlesViewSet
-from .views import categorie_delete, genres_delete
+from .v1.views import CategorieViewSet, GenreViwSet, TitlesViewSet
+from .v1.views import categorie_delete, genres_delete
 
 app_name = 'api'
 
