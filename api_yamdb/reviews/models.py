@@ -42,8 +42,6 @@ class Title(models.Model):
         default_related_name = "titles"
 
 
-# мои модели
-
 class AbstractModelGenreCategory(models.Model):
     name = models.CharField("Имя", max_length=settings.LIMIT_CHAT)
     slug = models.SlugField(
