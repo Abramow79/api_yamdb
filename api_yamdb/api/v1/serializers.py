@@ -66,10 +66,12 @@ class SignUpSerializer(serializers.Serializer):
 
 
 class TokenRegSerializer(serializers.Serializer):
-    username = serializers.RegexField(max_length=settings.LIMIT_USERNAME,
-                                      regex=r"^[\w.@+-]+\Z", required=True)
-    confirmation_code = serializers.CharField(max_length=settings.LIMIT_CHAT,
-                                              required=True)
+    username = serializers.CharField(required=True)
+    confirmation_code = serializers.CharField(required=True)
+    # username = serializers.RegexField(max_length=settings.LIMIT_USERNAME,
+    #                                   regex=r"^[\w.@+-]+\Z", required=True)
+    # confirmation_code = serializers.CharField(max_length=settings.LIMIT_CHAT,
+    #                                           required=True)
 
     def validate_username(self, value):
         return username_me(value)
@@ -84,6 +86,11 @@ class UserSerializer(serializers.ModelSerializer):
             "username", "email", "first_name", "last_name", "bio", "role")
 
     def validate_username(self, username):
+        # добавил проверку
+        if User.objects.filter(username=username).exists():
+            raise serializers.ValidationError(
+                f'Пользователь с таким username — {username} — уже существует.'
+            )
         if username in "me":
             raise serializers.ValidationError(
                 "Использовать имя me запрещено")
