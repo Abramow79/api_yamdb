@@ -126,7 +126,7 @@ class UserViewSet(mixins.ListModelMixin,
     filter_backends = (filters.SearchFilter,)
     search_fields = ("username",)
 
-# если убираю- падают два теста
+# если убираю- падают 11 тест
 
     @action(
         detail=False,
@@ -159,8 +159,8 @@ class UserViewSet(mixins.ListModelMixin,
         url_name="me",
         permission_classes=(permissions.IsAuthenticated,)
     )
+    # def me(self, request):
     def get_me_data(self, request):
-        # def me(self, request):
         """Позволяет пользователюполучить и редактировать свою информацию."""
         if request.method == "PATCH":
             serializer = UserSerializer(
