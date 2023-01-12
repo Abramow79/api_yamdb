@@ -28,6 +28,6 @@ urlpatterns = [
     path('genres/<slug:slug>/', genres_delete),
     path("", include(router.urls)),
     # path("auth/", include("users.urls")),
-    path("signup/", SignUpApiView.as_view(), name="signup"),
-    path("token/", TokenRegApiView.as_view(), name="token_access"),
+    path("auth/signup/", SignUpApiView.as_view(), name="signup"),
+    path("auth/token/", TokenRegApiView.as_view(), name="token_access"),
 ]
